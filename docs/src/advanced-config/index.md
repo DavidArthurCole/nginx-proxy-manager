@@ -285,3 +285,20 @@ for the life of the process.
 
 Some providers do not offer a `groups` scope and instead return groups inside `profile`. Authentik is
 one of them, which is why the default `OIDC_SCOPES` does not request `groups`.
+
+## Changing the Admin UI port from 81 to something else
+
+First, add an env var to your docker compose file:
+```yml
+    environment:
+      NPM_ADMIN_PORT: '8000'
+```
+
+And you'll probably want to expose that port as well
+
+```yml
+    ports:
+      - '8000:8000'
+```
+
+Then you'll be able to access admin UI at `http://localhost:8000`
