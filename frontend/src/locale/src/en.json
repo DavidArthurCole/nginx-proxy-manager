@@ -476,6 +476,9 @@
 	"login.2fa-verify": {
 		"defaultMessage": "Verify"
 	},
+	"login.sso": {
+		"defaultMessage": "Sign in with SSO"
+	},
 	"login.title": {
 		"defaultMessage": "Login to your account"
 	},

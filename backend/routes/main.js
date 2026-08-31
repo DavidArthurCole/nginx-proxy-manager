@@ -15,6 +15,7 @@ import streamsRoutes from "./nginx/streams.js";
 import reportsRoutes from "./reports.js";
 import schemaRoutes from "./schema.js";
 import settingsRoutes from "./settings.js";
+import ssoRoutes from "./sso.js";
 import tokensRoutes from "./tokens.js";
 import usersRoutes from "./users.js";
 import versionRoutes from "./version.js";
@@ -47,6 +48,7 @@ router.get("/", async (_, res /*, next*/) => {
 });
 
 router.use("/schema", schemaRoutes);
+router.use("/sso", ssoRoutes);
 router.use("/tokens", tokensRoutes);
 router.use("/users", usersRoutes);
 router.use("/audit-log", auditLogRoutes);

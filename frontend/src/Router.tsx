@@ -12,6 +12,7 @@ import {
 } from "src/components";
 import { useAuthState } from "src/context";
 import { useHealth } from "src/hooks";
+import AuthStore from "src/modules/AuthStore";
 
 const Setup = lazy(() => import("src/pages/Setup"));
 const Login = lazy(() => import("src/pages/Login"));
@@ -29,6 +30,19 @@ const Streams = lazy(() => import("src/pages/Nginx/Streams"));
 function Router() {
 	const health = useHealth();
 	const { authenticated } = useAuthState();
+
+	if (typeof window !== "undefined") {
+		const searchParams = new URLSearchParams(window.location.search);
+		const ssoToken = searchParams.get("sso_token");
+		const ssoExpires = searchParams.get("sso_expires");
+
+		if (ssoToken && ssoExpires) {
+			AuthStore.set({ token: ssoToken, expires: ssoExpires as unknown as number });
+			window.history.replaceState({}, document.title, "/");
+			window.location.reload();
+			return <LoadingPage />;
+		}
+	}
 
 	if (health.isLoading) {
 		return <LoadingPage />;

@@ -32,6 +32,7 @@ export * from "./getRedirectionHost";
 export * from "./getRedirectionHosts";
 export * from "./getSetting";
 export * from "./getSettings";
+export * from "./getSsoProviders";
 export * from "./getStream";
 export * from "./getStreams";
 export * from "./getToken";

@@ -248,3 +248,40 @@ On startup, we generate a resolvers directive for Nginx unless this is defined:
 
 In this configuration, all DNS queries performed by Nginx will fall to the `/etc/hosts` file
 and then the `/etc/resolv.conf`.
+
+## OIDC / SSO Login
+
+Setting these environment variables enables a "Sign in with SSO" button on the login screen.
+All four are required; if any is missing, SSO stays off and `GET /api/sso/providers` returns `{"oidc":false}`.
+
+```yml
+    environment:
+      OIDC_CLIENT_ID: nginx-proxy-manager
+      OIDC_CLIENT_SECRET: your-client-secret
+      OIDC_ISSUER_URL: https://auth.example.com/application/o/npm/
+      OIDC_REDIRECT_URI: https://npm.example.com/api/sso/callback
+```
+
+`OIDC_ISSUER_URL` requires a trailing slash. `OIDC_REDIRECT_URI` must not have one, and must match
+the redirect URI registered with your provider.
+
+Optional variables:
+
+| Variable | Default | Purpose |
+| -------- | ------- | ------- |
+| `OIDC_SCOPES` | `openid email profile` | Space separated scopes requested at authorization. |
+| `OIDC_AUTO_CREATE_USER` | `true` | Create a local user on first SSO login. Any value other than the literal string `false` is treated as true. |
+| `OIDC_GROUPS_CLAIM` | `groups` | ID token claim holding the user's groups. |
+| `OIDC_GROUP_ADMIN` | unset | Group granting the `admin` role. |
+| `OIDC_GROUP_USER` | unset | Group granting normal access. |
+
+If either `OIDC_GROUP_ADMIN` or `OIDC_GROUP_USER` is set, group checks are enforced: a user in neither
+group is refused, and an existing user's admin role is synced to the token on every login. A user who
+holds `admin` locally but is not in `OIDC_GROUP_ADMIN` is demoted, so set these carefully. Demotions
+are logged.
+
+Changes to any `OIDC_*` variable need a container restart; the discovered provider client is cached
+for the life of the process.
+
+Some providers do not offer a `groups` scope and instead return groups inside `profile`. Authentik is
+one of them, which is why the default `OIDC_SCOPES` does not request `groups`.
