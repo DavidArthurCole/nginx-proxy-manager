@@ -16,6 +16,10 @@ jobs:
           echo "version=$(cat .version)" >> "$GITHUB_OUTPUT"
           echo "commit=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
           echo "date=$(date -u '+%Y-%m-%d %T %Z')" >> "$GITHUB_OUTPUT"
+      - name: Stamp backend version
+        run: |
+          jq --arg v "${{ steps.build.outputs.version }}" '.version = $v' backend/package.json > backend/package.json.tmp
+          mv backend/package.json.tmp backend/package.json
       - name: Build frontend
         run: |
           docker run --rm \
