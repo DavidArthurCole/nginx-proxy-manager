@@ -497,6 +497,9 @@
 	"login.2fa-verify": {
 		"defaultMessage": "Kinnita"
 	},
+	"login.sso": {
+		"defaultMessage": "Logi sisse SSO-ga"
+	},
 	"login.title": {
 		"defaultMessage": "Logi kontole sisse"
 	},
